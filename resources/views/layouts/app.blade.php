@@ -37,7 +37,9 @@
                     <a class="nav-link text-white {{ request()->routeIs('returns') ? 'active' : '' }}" href="{{ route('returns') }}"><i class='bx bx-undo me-2'></i>Pengembalian</a>
                     <a class="nav-link text-white {{ request()->routeIs('equipment') ? 'active' : '' }}" href="{{ route('equipment') }}"><i class='bx bx-wrench me-2'></i>Data Peralatan</a>
                     <a class="nav-link text-white {{ request()->routeIs('reports') ? 'active' : '' }}" href="{{ route('reports') }}"><i class='bx bx-file me-2'></i>Laporan</a>
-                    <a class="nav-link text-white {{ request()->routeIs('settings') ? 'active' : '' }}" href="{{ route('settings') }}"><i class='bx bx-cog me-2'></i>Pengaturan</a>
+                    @if(auth()->user()?->role === 'admin')
+                        <a class="nav-link text-white {{ request()->routeIs('settings') ? 'active' : '' }}" href="{{ route('settings') }}"><i class='bx bx-cog me-2'></i>Pengaturan</a>
+                    @endif
                     <form action="{{ route('logout') }}" method="POST" class="mt-auto">
                         @csrf
                         <button class="btn btn-danger w-100"><i class='bx bx-log-out me-1'></i> Logout</button>

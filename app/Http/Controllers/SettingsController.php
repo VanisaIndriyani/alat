@@ -12,6 +12,7 @@ class SettingsController extends Controller
 {
     public function index()
     {
+        if (!auth()->check() || auth()->user()->role !== 'admin') { abort(403); }
         $setting = AppSetting::first();
         $staff = Staff::orderBy('name')->get();
         $students = Student::orderBy('name')->get();
@@ -20,6 +21,7 @@ class SettingsController extends Controller
 
     public function saveInstitution(Request $request)
     {
+        if (!auth()->check() || auth()->user()->role !== 'admin') { abort(403); }
         $data = $request->validate([
             'school_name' => 'nullable|string',
             'department_name' => 'nullable|string',
@@ -43,6 +45,7 @@ class SettingsController extends Controller
 
     public function staffStore(Request $request)
     {
+        if (!auth()->check() || auth()->user()->role !== 'admin') { abort(403); }
         $data = $request->validate(['name'=>'required|string','position'=>'nullable|string']);
         Staff::create($data);
         return redirect()->route('settings')->with('msg','Petugas ditambahkan');
@@ -50,12 +53,14 @@ class SettingsController extends Controller
 
     public function staffDelete($id)
     {
+        if (!auth()->check() || auth()->user()->role !== 'admin') { abort(403); }
         Staff::findOrFail($id)->delete();
         return redirect()->route('settings')->with('msg','Petugas dihapus');
     }
 
     public function staffUpdate($id, Request $request)
     {
+        if (!auth()->check() || auth()->user()->role !== 'admin') { abort(403); }
         $data = $request->validate(['name'=>'required|string','position'=>'nullable|string']);
         Staff::findOrFail($id)->update($data);
         return redirect()->route('settings')->with('msg','Petugas diperbarui');
@@ -63,6 +68,7 @@ class SettingsController extends Controller
 
     public function studentStore(Request $request)
     {
+        if (!auth()->check() || auth()->user()->role !== 'admin') { abort(403); }
         $data = $request->validate([
             'nis'=>'required|string|unique:students,nis',
             'name'=>'required|string',
@@ -75,12 +81,14 @@ class SettingsController extends Controller
 
     public function studentDelete($id)
     {
+        if (!auth()->check() || auth()->user()->role !== 'admin') { abort(403); }
         Student::findOrFail($id)->delete();
         return redirect()->route('settings')->with('msg','Peminjam dihapus');
     }
 
     public function studentUpdate($id, Request $request)
     {
+        if (!auth()->check() || auth()->user()->role !== 'admin') { abort(403); }
         $st = Student::findOrFail($id);
         $data = $request->validate([
             'nis'=>'required|string|unique:students,nis,'.$st->id,

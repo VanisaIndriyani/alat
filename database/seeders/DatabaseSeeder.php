@@ -19,6 +19,12 @@ class DatabaseSeeder extends Seeder
         User::firstOrCreate(['email' => 'admin@gmail.com'], [
             'name' => 'Admin',
             'password' => bcrypt('password'),
+            'role' => 'admin',
+        ]);
+        User::firstOrCreate(['email' => 'petugas@gmail.com'], [
+            'name' => 'Petugas',
+            'password' => bcrypt('password'),
+            'role' => 'staff',
         ]);
 
         \App\Models\Equipment::query()->insert([
