@@ -66,6 +66,11 @@
             background-color: var(--primary-dark);
             border-color: var(--primary-dark);
         }
+        .login-footer {
+            border-top: 1px solid rgba(0,0,0,.06);
+            padding-top: .75rem;
+            color: #6c757d;
+        }
     </style>
 </head>
 
@@ -123,7 +128,7 @@
                     </button>
                 </form>
 
-                <div class="text-center text-white-50 small mt-4">
+                <div class="login-footer text-center small mt-4">
                     {{ $setting?->footer_text ?? '© 2026 Tim IT SMK Nasional Dawarblandong' }}
                 </div>
             </div>
