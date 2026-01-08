@@ -40,6 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/pengaturan/instansi', [SettingsController::class, 'saveInstitution'])->name('settings.institution.save');
     Route::post('/pengaturan/petugas', [SettingsController::class, 'staffStore'])->name('settings.staff.store');
     Route::post('/pengaturan/petugas/{id}', [SettingsController::class, 'staffUpdate'])->name('settings.staff.update');
+    Route::post('/pengaturan/petugas/{id}/account', [SettingsController::class, 'staffCreateAccount'])->name('settings.staff.account');
     Route::post('/pengaturan/petugas/{id}/delete', [SettingsController::class, 'staffDelete'])->name('settings.staff.delete');
     Route::post('/pengaturan/peminjam', [SettingsController::class, 'studentStore'])->name('settings.student.store');
     Route::post('/pengaturan/peminjam/{id}', [SettingsController::class, 'studentUpdate'])->name('settings.student.update');

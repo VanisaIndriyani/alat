@@ -12,7 +12,11 @@ class LoansController extends Controller
     public function index(Request $request)
     {
         $cart = session('loan_cart', []);
-        $staff = Staff::orderBy('name')->get();
+        $staffQuery = Staff::query();
+        if (auth()->check() && auth()->user()->role === 'staff') {
+            $staffQuery->where('user_id', auth()->id());
+        }
+        $staff = $staffQuery->orderBy('name')->get();
         return view('loans.index', [
             'cart' => $cart,
             'results' => [],
@@ -30,7 +34,11 @@ class LoansController extends Controller
                 $w->where('code', $q)->orWhere('name', 'like', "%$q%");
             })->limit(10)->get();
         $cart = session('loan_cart', []);
-        $staff = Staff::orderBy('name')->get();
+        $staffQuery = Staff::query();
+        if (auth()->check() && auth()->user()->role === 'staff') {
+            $staffQuery->where('user_id', auth()->id());
+        }
+        $staff = $staffQuery->orderBy('name')->get();
         return view('loans.index', [
             'cart' => $cart,
             'results' => $results,

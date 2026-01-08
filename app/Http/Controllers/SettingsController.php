@@ -66,6 +66,24 @@ class SettingsController extends Controller
         return redirect()->route('settings')->with('msg','Petugas diperbarui');
     }
 
+    public function staffCreateAccount($id, Request $request)
+    {
+        if (!auth()->check() || auth()->user()->role !== 'admin') { abort(403); }
+        $staff = Staff::findOrFail($id);
+        $data = $request->validate([
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6',
+        ]);
+        $user = \App\Models\User::create([
+            'name' => $staff->name,
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+            'role' => 'staff',
+        ]);
+        $staff->user_id = $user->id; $staff->save();
+        return redirect()->route('settings')->with('msg','Akun login petugas dibuat');
+    }
+
     public function studentStore(Request $request)
     {
         if (!auth()->check() || auth()->user()->role !== 'admin') { abort(403); }

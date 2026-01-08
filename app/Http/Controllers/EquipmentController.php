@@ -9,6 +9,7 @@ class EquipmentController extends Controller
 {
     public function index(Request $request)
     {
+        if (!auth()->check() || auth()->user()->role !== 'admin') { abort(403); }
         $q = $request->query('q');
         $equipments = Equipment::when($q, function ($query) use ($q) {
             $query->where('name', 'like', "%$q%")->orWhere('code', 'like', "%$q%");
@@ -18,18 +19,21 @@ class EquipmentController extends Controller
 
     public function printAll()
     {
+        if (!auth()->check() || auth()->user()->role !== 'admin') { abort(403); }
         $equipments = Equipment::orderBy('name')->get();
         return view('equipment.qr_print', compact('equipments'));
     }
 
     public function printSingle($id)
     {
+        if (!auth()->check() || auth()->user()->role !== 'admin') { abort(403); }
         $eq = Equipment::findOrFail($id);
         return view('equipment.qr_single', compact('eq'));
     }
 
     public function store(Request $request)
     {
+        if (!auth()->check() || auth()->user()->role !== 'admin') { abort(403); }
         $data = $request->validate([
             'name' => 'required|string',
             'code' => 'nullable|string|unique:equipment,code',
@@ -58,6 +62,7 @@ class EquipmentController extends Controller
 
     public function update($id, Request $request)
     {
+        if (!auth()->check() || auth()->user()->role !== 'admin') { abort(403); }
         $eq = Equipment::findOrFail($id);
         $data = $request->validate([
             'name' => 'required|string',
@@ -79,6 +84,7 @@ class EquipmentController extends Controller
 
     public function destroy($id)
     {
+        if (!auth()->check() || auth()->user()->role !== 'admin') { abort(403); }
         $eq = Equipment::findOrFail($id);
         if ($eq->image_path && file_exists(public_path($eq->image_path))) {
             @unlink(public_path($eq->image_path));

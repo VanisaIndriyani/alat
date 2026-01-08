@@ -16,24 +16,24 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::firstOrCreate(['email' => 'admin@gmail.com'], [
+        User::updateOrCreate(['email' => 'admin@gmail.com'], [
             'name' => 'Admin',
             'password' => bcrypt('password'),
             'role' => 'admin',
         ]);
-        User::firstOrCreate(['email' => 'petugas@gmail.com'], [
+        User::updateOrCreate(['email' => 'petugas@gmail.com'], [
             'name' => 'Petugas',
             'password' => bcrypt('password'),
             'role' => 'staff',
         ]);
 
-        \App\Models\Equipment::query()->insert([
+        \App\Models\Equipment::query()->upsert([
             ['name' => 'Multimeter', 'code' => 'TL-001', 'status' => 'available', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Solder Station', 'code' => 'TL-002', 'status' => 'loaned', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Kabel LAN Tester', 'code' => 'TL-003', 'status' => 'available', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Power Supply', 'code' => 'TL-004', 'status' => 'damaged', 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Tang Crimping', 'code' => 'TL-005', 'status' => 'available', 'created_at' => now(), 'updated_at' => now()],
-        ]);
+        ], ['code']);
 
         $loanEquipmentId = \App\Models\Equipment::where('status','loaned')->first()->id ?? null;
         if ($loanEquipmentId) {

@@ -53,11 +53,18 @@
                     @csrf
                     <div class="col-12">
                         <label class="form-label">Petugas</label>
-                        <select class="form-select">
-                            @foreach($staff as $s)
-                                <option value="{{ $s->id }}">{{ $s->name }}{{ $s->position? ' ('.$s->position.')':'' }}</option>
-                            @endforeach
-                        </select>
+                        @if(count($staff) === 1)
+                            <input type="hidden" name="staff_id" value="{{ $staff[0]->id }}">
+                            <div class="form-control bg-light">{{ $staff[0]->name }}{{ $staff[0]->position? ' ('.$staff[0]->position.')':'' }}</div>
+                        @elseif(count($staff) > 1)
+                            <select class="form-select" name="staff_id">
+                                @foreach($staff as $s)
+                                    <option value="{{ $s->id }}">{{ $s->name }}{{ $s->position? ' ('.$s->position.')':'' }}</option>
+                                @endforeach
+                            </select>
+                        @else
+                            <div class="alert alert-warning small">Akun petugas Anda belum tertaut pada data petugas. Hubungi admin untuk membuatkannya di Pengaturan.</div>
+                        @endif
                     </div>
                     <div class="col-12 col-md-6">
                         <label class="form-label">NIS / NIP Peminjam</label>

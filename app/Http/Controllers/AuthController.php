@@ -30,7 +30,7 @@ class AuthController extends Controller
             return redirect()->intended('/dashboard');
         }
 
-        return back()->withErrors(['username' => 'Username atau password salah']);
+        return back()->withErrors(['username' => 'Username/Email atau password salah']);
     }
 
     public function logout(Request $request)

@@ -89,7 +89,7 @@
             </div>
 
             <div class="card-body p-4">
-                <h2 class="h5 text-center mb-3">Login Administrator</h2>
+                <h2 class="h5 text-center mb-3">Login Pengguna</h2>
 
                 @if ($errors->any())
                     <div class="alert alert-danger small text-center">
@@ -101,11 +101,11 @@
                     @csrf
 
                     <div class="mb-3">
-                        <label class="form-label small">Username</label>
+                        <label class="form-label small">Username atau Email</label>
                         <div class="input-group">
                             <span class="input-group-text bg-light"><i class='bx bx-user'></i></span>
                             <input type="text" name="username" value="{{ old('username') }}"
-                                   class="form-control" placeholder="Masukkan username" required>
+                                   class="form-control" placeholder="Masukkan username atau email" required>
                         </div>
                     </div>
 

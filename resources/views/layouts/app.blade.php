@@ -18,6 +18,13 @@
                 .sidebar { position: static; width: 100%; transform: none; }
                 .content { margin-left: 0; min-height: auto; overflow: visible; }
             }
+            .topbar { background: linear-gradient(180deg, #ffffff, #f8fafc); border: 1px solid #e9ecef; border-left: 6px solid var(--primary); border-radius: .75rem; padding: .5rem .75rem; box-shadow: 0 6px 16px rgba(0,0,0,.06); }
+            .topbar .btn { border-color: #e9ecef; }
+            .topbar .btn:hover { color: var(--primary); border-color: var(--primary); }
+            .role-badge { background: var(--primary); color: #fff; border-radius: .5rem; font-weight: 600; }
+            .role-badge.staff { background: transparent; color: var(--primary); border: 1px solid var(--primary); }
+            .user-info .name { line-height: 1; }
+            .user-info .desc { font-size: .85rem; color: #6c757d; margin-top: 2px; }
         </style>
     </head>
     <body class="bg-light">
@@ -28,15 +35,19 @@
                     <div class="fw-semibold mt-2">{{ $setting?->school_name ?? 'SMK Nasional Dawarblandong' }}</div>
                     <div class="text-white-50 small">Sistem Peminjaman Alat</div>
                     <span class="badge bg-light text-dark mt-2">{{ $setting?->department_name ?? 'TEKNIK KOMPUTER & JARINGAN' }}</span>
-                   
-                  
                 </div>
                 <nav class="nav flex-column gap-1 flex-grow-1">
                     <a class="nav-link text-white {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}"><i class='bx bxs-dashboard me-2'></i>Dashboard</a>
+                    @if(auth()->user()?->role !== 'admin')
                     <a class="nav-link text-white {{ request()->routeIs('loans') ? 'active' : '' }}" href="{{ route('loans') }}"><i class='bx bx-calendar me-2'></i>Peminjaman</a>
                     <a class="nav-link text-white {{ request()->routeIs('returns') ? 'active' : '' }}" href="{{ route('returns') }}"><i class='bx bx-undo me-2'></i>Pengembalian</a>
+                    @endif
+                    @if(auth()->user()?->role === 'admin')
                     <a class="nav-link text-white {{ request()->routeIs('equipment') ? 'active' : '' }}" href="{{ route('equipment') }}"><i class='bx bx-wrench me-2'></i>Data Peralatan</a>
+                    @endif
+                    @if(auth()->user()?->role !== 'admin')
                     <a class="nav-link text-white {{ request()->routeIs('reports') ? 'active' : '' }}" href="{{ route('reports') }}"><i class='bx bx-file me-2'></i>Laporan</a>
+                    @endif
                     @if(auth()->user()?->role === 'admin')
                         <a class="nav-link text-white {{ request()->routeIs('settings') ? 'active' : '' }}" href="{{ route('settings') }}"><i class='bx bx-cog me-2'></i>Pengaturan</a>
                     @endif
@@ -48,8 +59,23 @@
                 <div class="small text-white-50 mt-2">{{ $setting?->footer_text ?? '© Tim IT SMK Nasional Dawarblandong' }}</div>
             </aside>
             <main class="content flex-grow-1 p-3 p-lg-4">
-                <div class="d-flex align-items-center mb-2">
-                    <button id="btnToggleSidebar" class="btn btn-light btn-sm"><i class='bx bx-menu'></i></button>
+                <div class="topbar d-flex align-items-center justify-content-between mb-3">
+                    <div>
+                        <button id="btnToggleSidebar" class="btn btn-light btn-sm"><i class='bx bx-menu'></i></button>
+                    </div>
+                    @if(auth()->check())
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="badge role-badge {{ auth()->user()->role === 'admin' ? 'admin' : 'staff' }}">{{ auth()->user()->role === 'admin' ? 'Admin' : 'Petugas' }}</span>
+                        <div class="user-info text-end">
+                            <div class="name">Selamat datang, <strong>{{ auth()->user()->name }}</strong></div>
+                            @if(auth()->user()->role === 'admin')
+                                <div class="desc">Admin (Kepala Jurusan): tambah alat & konfigurasi aplikasi</div>
+                            @else
+                                <div class="desc">Petugas: peminjaman, pengembalian, laporan</div>
+                            @endif
+                        </div>
+                    </div>
+                    @endif
                 </div>
                 @yield('content')
             </main>
