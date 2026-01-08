@@ -9,13 +9,13 @@
         @php($setting = \App\Models\AppSetting::first())
         <style>
             :root { --sidebar-w: {{ ($setting?->sidebar_width ?? 260) }}px; --primary: {{ $setting?->theme_primary ?? '#0b3a82' }}; }
-            .sidebar { width: var(--sidebar-w); background: linear-gradient(180deg, var(--primary), #072a5e); position: fixed; top: 0; bottom: 0; left: 0; transition: transform .2s ease; transform: translateX(0); }
+            .sidebar { width: var(--sidebar-w); background: linear-gradient(180deg, var(--primary), #072a5e); position: fixed; top: 0; bottom: 0; left: 0; transition: transform .2s ease; transform: translateX(0); z-index: 1040; }
             .sidebar .nav-link.active { background-color: rgba(255,255,255,.22); border-radius: .5rem; }
             .content { margin-left: var(--sidebar-w); min-height: 100vh; overflow-y: auto; transition: margin-left .2s ease; }
             body.sidebar-collapsed .sidebar { transform: translateX(-100%); }
             body.sidebar-collapsed .content { margin-left: 0; }
             @media (max-width: 992px) {
-                .sidebar { position: static; width: 100%; transform: none; }
+                .sidebar { width: 80vw; }
                 .content { margin-left: 0; min-height: auto; overflow: visible; }
             }
             .topbar { background: linear-gradient(180deg, #ffffff, #f8fafc); border: 1px solid #e9ecef; border-left: 6px solid var(--primary); border-radius: .75rem; padding: .5rem .75rem; box-shadow: 0 6px 16px rgba(0,0,0,.06); }
@@ -29,7 +29,7 @@
     </head>
     <body class="bg-light">
         <div class="d-flex">
-            <aside class="sidebar text-white d-none d-lg-flex flex-column p-3">
+            <aside class="sidebar text-white d-flex flex-column p-3">
                 <div class="text-center mb-3">
                     <img src="{{ $setting?->logo_path ? asset($setting->logo_path) : asset('img/logo.png') }}" alt="Logo" class="rounded-circle" style="width:72px;height:72px;">
                     <div class="fw-semibold mt-2">{{ $setting?->school_name ?? 'SMK Nasional Dawarblandong' }}</div>
@@ -87,6 +87,7 @@
                 var body=document.body;
                 var saved=localStorage.getItem(key);
                 if(saved==='1'){ body.classList.add('sidebar-collapsed'); }
+                else if(window.innerWidth<992){ body.classList.add('sidebar-collapsed'); }
                 var btn=document.getElementById('btnToggleSidebar');
                 if(btn){ btn.addEventListener('click', function(){ body.classList.toggle('sidebar-collapsed'); localStorage.setItem(key, body.classList.contains('sidebar-collapsed')?'1':'0'); }); }
             })();
